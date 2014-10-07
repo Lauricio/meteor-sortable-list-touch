@@ -1,0 +1,27 @@
+<head>
+  <title>drag</title>
+</head>
+
+<body>
+  {{> hello}}
+</body>
+
+<template name="hello">
+  {{> leaderboard}}
+</template>
+
+
+<template name="leaderboard">
+  <div id="players" class="items-list">
+    {{#each players}}
+      {{> player}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="player">
+  <div class="item {{selected}}" id="{{_id}}">
+    <span class="pos">{{pos}}</span>
+    <span class="name">{{name}}</span>
+  </div>
+</template>

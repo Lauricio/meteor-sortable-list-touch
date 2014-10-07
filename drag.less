@@ -1,0 +1,30 @@
+
+@backdrop: hsla(204, 14%, 89%, 1);
+@action: hsla(145, 63%, 42%, 1);
+
+body {
+  margin: 0;
+  background-color: @backdrop;
+  user-select: none;
+}
+
+.items-list {
+  padding: 2em 1em;
+
+  .item {
+    background-color: @action;
+    color: white;
+    border-radius: .3em;
+    margin: .5em;
+    padding: .5em;
+    cursor: pointer;
+  }
+
+  .pos {
+    background-color: white;
+    color: @action;
+    padding: .2em .5em;
+    margin-right: 0.2em;
+    border-radius: 50%;
+  }
+}
