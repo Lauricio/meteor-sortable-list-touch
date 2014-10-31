@@ -19,7 +19,7 @@ if (Meteor.isClient) {
           // start dragging
         },
         onEnd: function (evt) { 
-          var items = $("#players")[0].children;
+          var items = $(el)[0].children;
           for (var i = items.length - 1; i >= 0; i--) {
             Players.update({_id: items[i].id}, {$set: {pos: $(items[i]).index() }});
           };          
@@ -42,7 +42,10 @@ if (Meteor.isServer) {
                    "Sir Isaac Newton",
                    "Galileo",
                    "Albert Einstein",
-                   "Charles Darwin"
+                   "Charles Darwin",
+                   "Stephen Hawking",
+                   "Johannes Kepler",
+                   "Archimedes"
                    ];
       for (var i = 0; i < names.length; i++)
         Players.insert({name: names[i], pos: [i]});
