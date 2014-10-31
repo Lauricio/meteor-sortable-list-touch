@@ -1,5 +1,5 @@
 /**!
- * Sortable v0.5.1
+ * Sortable v1.5.2
  * @author  RubaXa   <trash@rubaxa.org>
  * @license MIT
  * https://github.com/RubaXa/Sortable
