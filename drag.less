@@ -1,6 +1,7 @@
 
 @backdrop: hsla(204, 14%, 89%, 1);
 @action: hsla(145, 63%, 42%, 1);
+@title: #1E8BC3;
 
 body {
   margin: 0;
@@ -8,8 +9,8 @@ body {
   user-select: none;
 }
 
-.items-list {
-  padding: 2em 1em;
+.items-list, .group-items {
+  padding: 0 2em 1em;
 
   .item {
     background-color: @action;
@@ -27,4 +28,19 @@ body {
     margin-right: 0.2em;
     border-radius: 2px;
   }
+
+  .sortable-ghost {
+    opacity: .6;
+  }
+}
+
+
+
+
+.group-title {
+  background-color: @title;
+  color: white;
+  margin: 0 1em;
+  padding: .3em;
+  border-radius: 2px;
 }

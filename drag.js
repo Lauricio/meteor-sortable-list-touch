@@ -1,30 +1,83 @@
 Players = new Meteor.Collection("players");
+Groups = new Meteor.Collection("groups");
 
 if (Meteor.isClient) {
-  Template.leaderboard.players = function () {
-    return Players.find({}, {sort: {pos: 1}});
+
+
+  Template.myContent.helpers({
+    groups: function () {
+      return Groups.find({}, {sort: {sortOrderPosition: 1}});
+    }  });
+
+  Template.group.helpers({
+    items: function () {
+      return Players.find({group: this._id}, {sort: {sortOrderPosition: 1}});
+    }
+  });
+
+//
+//      Sortable Group list
+//
+
+  // Settings and helpers
+
+  // DOM: groupWrapper > group > groupItemsWrapper > items
+  var groupWrapper;
+  var groupWrapperId = "#groupWrapper";
+  var groupItemsWrapperClass = "js-sortGroupItems";
+  var groupClass = ".js-sortGroup";
+  var groupHandle = ".js-sortGroupHandle";
+  var groupName = "myGroup"; // Used to connect rendered groups.
+  var itemsCollection = Players;
+  var groupCollection = Groups;
+
+  function sortGroupItems() {
+
+    [].forEach.call(groupWrapper.getElementsByClassName(groupItemsWrapperClass), function (el){
+      var items = $(el)[0].children;
+      for (var i = items.length - 1; i >= 0; i--) {
+        itemsCollection.update({_id: items[i].id}, {$set: {sortOrderPosition: $(items[i]).index() + 1, group: $(items[i]).closest(groupClass).attr('id') }});
+      }
+    });
   };
 
-  Template.leaderboard.rendered = function () {
-    var el = document.getElementById('players');
+  function createSortableGroups(el) {
+    console.log('%c create groups   ',  'background: #5D76DB; color: white; padding: 1px 15px 1px 5px;');
     new Sortable(el, {
-        // group: "name",
-        // store: null, // @see Store
-        // handle: ".my-handle", // Restricts sort start click/touch to the specified element
-        // filter: ".ignor-elements", // Selectors that do not lead to dragging (String or Function)
-        draggable: ".item",   // Specifies which items inside the element should be sortable
-        // ghostClass: "sortable-ghost",
-
-        onStart: function (evt) { 
-          // start dragging
-        },
-        onEnd: function (evt) { 
-          var items = $(el)[0].children;
-          for (var i = items.length - 1; i >= 0; i--) {
-            Players.update({_id: items[i].id}, {$set: {pos: $(items[i]).index() }});
-          };          
-        }
+      draggable: groupClass,
+      handle: groupHandle,
+      animation: 150,
+      onEnd: function (evt) {
+        var items = $(el)[0].children;
+        for (var i = items.length - 1; i >= 0; i--) {
+          groupCollection.update({_id: items[i].id}, {$set: {sortOrderPosition: $(items[i]).index() }});
+        };
+      }
     });
+  }
+
+  function createSortableItems(el) {
+    console.log('%c create items   ',  'background: #5D76DB; color: white; padding: 1px 15px 1px 5px;');
+    var el = el[0];
+    new Sortable(el, {
+      group: groupName,
+      animation: 150,
+      onEnd: function (evt) {
+        sortGroupItems();
+      }
+    });
+  }
+
+  // END: Settings and helpers
+
+
+  Template.myContent.rendered = function () {
+    groupWrapper = this.$(groupWrapperId)[0];
+    createSortableGroups(groupWrapper);
+  };
+
+  Template.group.rendered = function () {
+    createSortableItems(this.$('.' + groupItemsWrapperClass));
   };
 
 }
@@ -48,7 +101,13 @@ if (Meteor.isServer) {
                    "Archimedes"
                    ];
       for (var i = 0; i < names.length; i++)
-        Players.insert({name: names[i], pos: [i]});
+        Players.insert({name: names[i], sortOrderPositionition: i + 1, group: "PkopJd5s6kHy8rwuX"});
+    }
+
+    if (Groups.find().count() === 0) {
+        Groups.insert({name: "Platinum", sortOrderPositionition: 1, _id: "PkopJd5s6kHy8rwuX"});
+        Groups.insert({name: "Gold", sortOrderPositionition: 2, _id: "4H9jcndvXgaiHdHd2"});
+        Groups.insert({name: "Silver", sortOrderPositionition: 3, _id: "pgge34GQ48mxBYRdM"});
     }
   });
 }

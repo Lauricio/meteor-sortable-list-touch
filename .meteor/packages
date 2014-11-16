@@ -7,4 +7,6 @@ meteor-platform
 autopublish
 insecure
 lauricio:less-autoprefixer
+gadicohen:famous-views
+mjn:famous
 

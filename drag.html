@@ -1,27 +1,40 @@
 <head>
-  <title>drag</title>
+  <title>Sortable Groups and lists</title>
 </head>
 
 <body>
-  {{> hello}}
+  {{> groups}}
 </body>
 
-<template name="hello">
-  {{> leaderboard}}
+<template name="groups">
+  {{#Surface size="[undefined,undefined]"}}
+    {{> myContent}}
+  {{/Surface}}
 </template>
 
-
-<template name="leaderboard">
-  <div id="players" class="items-list">
-    {{#each players}}
-      {{> player}}
+<template name="myContent">
+  <div id="groupWrapper">
+    {{#each groups}}
+      {{> group}}
     {{/each}}
   </div>
 </template>
 
-<template name="player">
-  <div class="item {{selected}}" id="{{_id}}">
-    <span class="pos">{{pos}}</span>
+<template name="group">
+  <div class="js-sortGroup group" id="{{_id}}">
+    <h2 class="js-sortGroupHandle group-title">{{name}}</h2>
+    <div class="js-sortGroupItems group-items">
+      {{#each items}}
+        {{> item}}
+      {{/each}}
+    </div>
+  </div>
+</template>
+
+<template name="item">
+  <div class="item" id="{{_id}}">
+    <span class="sortOrderPosition pos">{{sortOrderPosition}}</span>
     <span class="name">{{name}}</span>
   </div>
 </template>
+
