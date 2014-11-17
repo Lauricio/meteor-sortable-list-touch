@@ -3,6 +3,9 @@ Groups = new Meteor.Collection("groups");
 
 if (Meteor.isClient) {
 
+  Template.layout.rendered = function () {
+    fview = FView.byId("myScroll");
+  };
 
   Template.myContent.helpers({
     groups: function () {
@@ -57,21 +60,21 @@ if (Meteor.isClient) {
   function createSortableItems(el) {
     var el = el[0];
     new Sortable(el, {
-      group: groupName,
-      animation: 150,
-      onEnd: function (evt) {
-        sortGroupItems();
-      }
+      // group: groupName,
+      // animation: 150,
+      // onEnd: function (evt) {
+      //   sortGroupItems();
+      // }
     });
   }
 
   // END: Settings and helpers
 
 
-  Template.myContent.rendered = function () {
-    groupWrapper = this.$(groupWrapperId)[0];
-    createSortableGroups(groupWrapper);
-  };
+  // Template.myContent.rendered = function () {
+  //   groupWrapper = this.$(groupWrapperId)[0];
+  //   createSortableGroups(groupWrapper);
+  // };
 
   Template.group.rendered = function () {
     createSortableItems(this.$('.' + groupItemsWrapperClass));
