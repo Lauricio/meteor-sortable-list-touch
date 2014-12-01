@@ -412,64 +412,65 @@
       _off(document, 'touchcancel', this._onDrop);
     },
 
-    _onDrop: function (evt/**Event*/){
-      clearInterval(this._loopId);
+    // _onDrop: function (evt/**Event*/){
+    //   clearInterval(this._loopId);
 
-      // Unbind events
-      _off(document, 'drop', this._onDrop);
-      _off(document, 'dragover', _globalDragOver);
+    //   // Unbind events
+    //   _off(document, 'drop', this._onDrop);
+    //   _off(document, 'dragover', _globalDragOver);
 
-      _off(this.el, 'dragend', this._onDrop);
-      _off(this.el, 'dragstart', this._onDragStart);
-      _off(this.el, 'selectstart', this._onTapStart);
+    //   _off(this.el, 'dragend', this._onDrop);
+    //   _off(this.el, 'dragstart', this._onDragStart);
+    //   _off(this.el, 'selectstart', this._onTapStart);
 
-      this._offUpEvents();
+    //   this._offUpEvents();
 
-      if( evt ){
-        evt.preventDefault();
-        evt.stopPropagation();
+    //   if( evt ){
+    //     evt.preventDefault();
+    //     evt.stopPropagation();
 
-        if( ghostEl ){
-          ghostEl.parentNode.removeChild(ghostEl);
-        }
+    //     if( ghostEl ){
+    //       ghostEl.parentNode.removeChild(ghostEl);
+    //     }
 
-        if( dragEl ){
-          _disableDraggable(dragEl);
-          _toggleClass(dragEl, this.options.ghostClass, false);
+    //     if( dragEl ){
+    //       _disableDraggable(dragEl);
+    //       _toggleClass(dragEl, this.options.ghostClass, false);
 
-          if( !rootEl.contains(dragEl) ){
-            // Remove event
-            _dispatchEvent(rootEl, 'remove', dragEl);
+    //       if( !rootEl.contains(dragEl) ){
+    //         // Remove event
+    //         _dispatchEvent(rootEl, 'remove', dragEl);
 
-            // Add event
-            _dispatchEvent(dragEl, 'add');
-          }
-          else if( dragEl.nextSibling !== nextEl ){
-            // Update event
-            _dispatchEvent(dragEl, 'update');
-          }
+    //         // Add event
+    //         _dispatchEvent(dragEl, 'add');
+    //       }
+    //       else if( dragEl.nextSibling !== nextEl ){
+    //         // Update event
+    //         _dispatchEvent(dragEl, 'update');
+    //       }
 
-          _dispatchEvent(dragEl, 'end');
-        }
+    //       _dispatchEvent(dragEl, 'end');
+    //     }
 
-        // Set NULL
-        rootEl =
-        dragEl =
-        ghostEl =
-        nextEl =
+    //     // Set NULL
+    //     rootEl =
+    //     dragEl =
+    //     ghostEl =
+    //     nextEl =
 
-        tapEvt =
-        touchEvt =
+    //     tapEvt =
+    //     touchEvt =
 
-        lastEl =
-        lastCSS =
+    //     lastEl =
+    //     lastCSS =
 
-        activeGroup = null;
+    //     activeGroup = null;
 
-        // Save sorting
-        this.options.store && this.options.store.set(this);
-      }
-    },
+    //     // Save sorting
+    //     this.options.store && this.options.store.set(this);
+    //   }
+    //   debugger
+    // },
 
 
     /**
