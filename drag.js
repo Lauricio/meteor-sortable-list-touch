@@ -32,6 +32,7 @@ if (Meteor.isClient) {
   var groupCollection = Groups;
 
   function sortGroupItems() {
+
     [].forEach.call(groupWrapper.getElementsByClassName(groupItemsWrapperClass), function (el){
       var items = $(el)[0].children;
       for (var i = items.length - 1; i >= 0; i--) {
@@ -41,6 +42,7 @@ if (Meteor.isClient) {
   };
 
   function createSortableGroups(el) {
+    console.log('%c create groups   ',  'background: #5D76DB; color: white; padding: 1px 15px 1px 5px;');
     new Sortable(el, {
       draggable: groupClass,
       handle: groupHandle,
@@ -55,6 +57,7 @@ if (Meteor.isClient) {
   }
 
   function createSortableItems(el) {
+    console.log('%c create items   ',  'background: #5D76DB; color: white; padding: 1px 15px 1px 5px;');
     var el = el[0];
     new Sortable(el, {
       group: groupName,
