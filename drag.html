@@ -8,16 +8,14 @@
 
 <template name="groups">
   {{#famousContext id="mainCtx"}}
-    {{#Scrollview size="[undefined,undefined]"}}
       {{#Surface size="[undefined,true]"}}
         {{> myContent}}
       {{/Surface}}
-    {{/Scrollview}}
   {{/famousContext}}
 </template>
 
 <template name="myContent">
-  <div id="groupWrapper">
+  <div id="groupWrapper" class="wrapper">
     {{#each groups}}
       {{> group}}
     {{/each}}
