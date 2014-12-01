@@ -7,11 +7,13 @@
 </body>
 
 <template name="groups">
-{{#Scrollview size="[400,600]"}}
-  {{#Surface size="[undefined,undefined]"}}
-    {{> myContent}}
-  {{/Surface}}
-{{/Scrollview}}
+  {{#famousContext id="mainCtx"}}
+    {{#Scrollview size="[400,600]"}}
+      {{#Surface size="[undefined,undefined]"}}
+        {{> myContent}}
+      {{/Surface}}
+    {{/Scrollview}}
+  {{/famousContext}}
 </template>
 
 <template name="myContent">

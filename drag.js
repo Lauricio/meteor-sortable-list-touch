@@ -47,7 +47,7 @@ if (Meteor.isClient) {
       draggable: groupClass,
       handle: groupHandle,
       animation: 150,
-      onEnd: function (evt) {
+      onEnd2: function (evt) {
         var items = $(el)[0].children;
         for (var i = items.length - 1; i >= 0; i--) {
           groupCollection.update({_id: items[i].id}, {$set: {sortOrderPosition: $(items[i]).index() }});
@@ -62,7 +62,7 @@ if (Meteor.isClient) {
     new Sortable(el, {
       group: groupName,
       animation: 150,
-      onEnd: function (evt) {
+      onEnd2: function (evt) {
         sortGroupItems();
       }
     });
