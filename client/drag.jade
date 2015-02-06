@@ -1,0 +1,43 @@
+template(name="layout")
+  +myContent2
+  //- +myContent
+  +example
+
+template(name="item")
+  .item(data-id="{{_id}}")
+    span.sortOrderPosition.pos {{sortOrderPosition}}
+    span.name {{name}}
+
+template(name="example")
+  h1 example
+
+template(name="myContent2")
+  +ooSortableList collection="Groups" handle=".js-sortHandle"
+    each groups
+      +comTest
+
+template(name="comTest")
+  .js-sortGroup.group(data-id="{{_id}}")
+    h2.js-sortHandle {{name}}
+    h2 not handle
+    +ooSortableList collection="Players" groupName="mygroup"
+      each items
+        +item
+
+template(name="ooSortableList")
+  .js-sortableList
+    +Template.contentBlock
+
+
+
+//- template(name="myContent")
+//-   #groupWrapper2
+//-     each groups
+//-       +group
+
+//- template(name="group")
+//-   .js-sortGroup.group(id="{{_id}}")
+//-     h2.js-sortGroupHandle.group-title {{name}}
+//-     .js-sortGroupItems.group-items
+//-       each items
+//-         +item
