@@ -3,32 +3,35 @@ template(name="layout")
   //- +myContent
   +example
 
-template(name="item")
-  .item(data-id="{{_id}}")
-    span.sortOrderPosition.pos {{sortOrderPosition}}
-    span.name {{name}}
 
 template(name="example")
   h1 example
 
 template(name="myContent2")
-  +ooSortableList collection="Groups" handle=".js-sortHandle"
+  +ooSortableList collection="Groups" handle=".js-sortHandle" level="2"
     each groups
       +comTest
 
 template(name="comTest")
-  .js-sortGroup.group(data-id="{{_id}}")
+  .js-sortGroup.group(id="{{_id}}")
     h2.js-sortHandle {{name}}
     h2 not handle
-    +ooSortableList collection="Players" groupName="mygroup"
+    +ooSortableList collection="Players" groupName="mygroup" context=this
       each items
         +item
 
+template(name="item")
+  .item(id="{{_id}}")
+    span.sortOrder.pos {{sortOrder}}
+    span.name {{name}}
+
 template(name="ooSortableList")
-  .js-sortableList
+  .oo-sortableList(class="js-sortableList{{level}}")
     +Template.contentBlock
 
-
+//- template(name="ooSortableList2")
+//-   .js-sortableList2
+//-     +Template.contentBlock
 
 //- template(name="myContent")
 //-   #groupWrapper2

@@ -18,7 +18,7 @@
   //   [].forEach.call(groupWrapper.getElementsByClassName(groupItemsWrapperClass), function (el){
   //     var items = $(el)[0].children;
   //     for (var i = items.length - 1; i >= 0; i--) {
-  //       itemsCollection.update({_id: items[i].id}, {$set: {sortOrderPosition: $(items[i]).index() + 1, group: $(items[i]).closest(groupClass).attr('id') }});
+  //       itemsCollection.update({_id: items[i].id}, {$set: {sortOrder: $(items[i]).index() + 1, group: $(items[i]).closest(groupClass).attr('id') }});
   //     }
   //   });
   // };
@@ -31,7 +31,7 @@
   //     onEnd: function (evt) {
   //       var items = $(el)[0].children;
   //       for (var i = items.length - 1; i >= 0; i--) {
-  //         groupCollection.update({_id: items[i].id}, {$set: {sortOrderPosition: $(items[i]).index() }});
+  //         groupCollection.update({_id: items[i].id}, {$set: {sortOrder: $(items[i]).index() }});
   //       };
   //     }
   //   });
@@ -62,94 +62,80 @@
 
 
 
+Template.ooSortableList.created = function () {
+  var self = this;
+  var collection = self.data.collection;
+  self.TTT = 22;
+  self.dataCursor = function() {
+      return self.data.dataCursor;
+    }
+  self.listElement = new Blaze.ReactiveVar(false);
+  self.updateSortPositions = function() {
+    var el = self.listElement.get();
+    // prevents form firing before dom is rendered
+    if(el) {
+      var items = $(el)[0].children;
+      if(this.data.groupName){
+        for (var i = items.length - 1; i >= 0; i--) {
+          Collection[collection].update({_id: items[i].id}, {$set: {sortOrder: $(items[i]).index() + 1, group: $(items[i]).closest(".js-sortGroup").attr('id') }});
+        }
+      } else {
+        for (var i = items.length - 1; i >= 0; i--) {
+          Collection[collection].update({_id: items[i].id}, {$set: {sortOrder: $(items[i]).index() + 1}});
+        }
+      }
+    }
+
+  }
+  if(this.data.groupName) {
+    console.log('%c Test times   ',  'background: #5D76DB; color: white; padding: 1px 15px 1px 5px;');
+    self.autorun(function(){
+      var count = Collection[collection].find({group: self.data.context._id}).count();
+      console.log('%c count   ',  'background: #FF9900; color: white; padding: 1px 15px 1px 5px;', count);
+      self.updateSortPositions();
+    })
+  }
+
+};
+
+
 Template.ooSortableList.rendered = function () {
   var self = this;
-  var el = self.$(".js-sortableList")[0];
+  if (self.data.level){
+    var classSelector = ".js-sortableList" + self.data.level
+    var el = self.$(classSelector)[0];
+  } else {
+    var el = self.$(".js-sortableList")[0];
+  }
+  self.listElement.set(el);
   var collection = self.data.collection;
   // Set part of item as a drag handle
   var handle = self.data.handle ? self.data.handle : "";
   // Link multiple lists to allow moving items between
   var groupName = self.data.groupName ? self.data.groupName : null;
-  console.log('%c groupName   ',  'background: #FF9900; color: white; padding: 1px 15px 1px 5px;', groupName);
   new Sortable(el, {
     animation: 150,
     handle: handle,
     group: groupName,
-    store: {
-            /**
-             * Get the order of elements. Called once during initialization.
-             * @param   {Sortable}  sortable
-             * @returns {Array}
-             */
-            get: function (sortable) {
-                var order = localStorage.getItem(sortable.options.group);
-                // console.log('%c order   ',  'background: #FF9900; color: white; padding: 1px 15px 1px 5px;', order);
-                return order ? order.split('|') : [];
-            },
-
-            /**
-             * Save the order of elements. Called onEnd (when the item is dropped).
-             * @param {Sortable}  sortable
-             */
-            set: function (sortable) {
-                var order = sortable.toArray();
-                console.log('%c order   ',  'background: #FF9900; color: white; padding: 1px 15px 1px 5px;', order);
-                localStorage.setItem(sortable.options.group, order.join('|'));
-            }
+    onStart: function (evt) {
+            evt.oldIndex;  // element index within parent
+            console.log('%c evt.oldIndex   ',  'background: #FF9900; color: white; padding: 1px 15px 1px 5px;', evt);
+            evt.preventDefault();
+            evt.stopPropagation();
+            return
         },
-    // Element is dropped into the list from another list
-        onAdd: function (/**Event*/evt) {
-            var itemEl = evt.item;  // dragged HTMLElement
-            evt.from;  // previous list
-            // + indexes from onEnd
-            console.log('%c evt add  ',  'background: #FF9900; color: white; padding: 1px 15px 1px 5px;', evt);
-            console.log('%c this   ',  'background: #FF9900; color: white; padding: 1px 15px 1px 5px;', this);
-            console.log('%c options   ',  'background: #FF9900; color: white; padding: 1px 15px 1px 5px;', this.options.store.get(this));
-        },
-
-        // Changed sorting within list
-        onUpdate: function (/**Event*/evt) {
-            var itemEl = evt.item;  // dragged HTMLElement
-            // + indexes from onEnd
-            console.log('%c evt update  ',  'background: #FF9900; color: white; padding: 1px 15px 1px 5px;', evt);
-        },
-
-        // Called by any change to the list (add / update / remove)
-        onSort: function (/**Event*/evt) {
-          console.log('%c evt sort  ',  'background: #FF9900; color: white; padding: 1px 15px 1px 5px;', evt);
-            // same properties as onUpdate
-        },
-        // Element is removed from the list into another list
-        onRemove: function (/**Event*/evt) {
-            // same properties as onUpdate
-            console.log('%c evt remove  ',  'background: #FF9900; color: white; padding: 1px 15px 1px 5px;', evt);
-        }
-    // onEnd: function (evt) {
-    //   console.log('%c end1   ',  'background: #5D76DB; color: white; padding: 1px 15px 1px 5px;');
-    //   var items = el.children;
-    //   for (var i = items.length - 1; i >= 0; i--) {
-    //     // Collection[collection].update({_id: items[i].id}, {$set: {sortOrderPosition: $(items[i]).index() + 1 }});
-
-    //     if(groupName) {
-    //       console.log('%c group   ',  'background: #5D76DB; color: white; padding: 1px 15px 1px 5px;', $(items[i]).closest(".js-sortGroup").attr('id'));
-    //       Collection[collection].update({_id: items[i].id}, {$set: {sortOrderPosition: $(items[i]).index() + 1, group: $(items[i]).closest(".js-sortGroup").attr('id') }});
-    //     } else {
-    //       console.log('%c no group   ',  'background: #5D76DB; color: white; padding: 1px 15px 1px 5px;');
-    //       Collection[collection].update({_id: items[i].id}, {$set: {sortOrderPosition: $(items[i]).index() + 1 }});
-    //     }
-
-    //   }
-    // }
-    // onSort: function (evt) {
-    //     console.log('%c evt   ',  'background: #FF9900; color: white; padding: 1px 15px 1px 5px;', evt);
-    // },
   });
 };
 
-
-// Template.ooSortableList.events({
-//   'dragend .js-sortableList' : function (e, t) {
-//     console.log('%c e   ',  'background: #FF9900; color: white; padding: 1px 15px 1px 5px;', e);
-//     console.log('%c drag this   ',  'background: #FF9900; color: white; padding: 1px 15px 1px 5px;', this);
+// Template.ooSortableList.helpers({
+//   listCursor : function () {
+//    return Template.instance().dataCursor();
 //   }
 // });
+
+Template.ooSortableList.events({
+  'dragend .js-sortableList, dragend .js-sortableList2' : function (e, t) {
+    t.updateSortPositions();
+  }
+
+});
